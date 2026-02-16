@@ -53,9 +53,7 @@ int main(int argc, char** argv){
 
     if (argc == 2){
          // replace with your data structure
-        sort(allMovies.begin(), allMovies.end(), [](const Movie &a, const Movie &b) {
-            return a > b;
-        });
+            sort(allMovies.begin(), allMovies.end());
         for (const Movie &m : allMovies) {
             cout << m.getName() << ", " << m.getRating() << endl;
 

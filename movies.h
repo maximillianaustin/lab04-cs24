@@ -2,6 +2,7 @@
 class Movie {
     public:
     bool operator>(const Movie &left) const;
+    bool operator<(const Movie &other) const;
     bool operator==(const Movie &left) const;   
     std::string getName() const;
     double getRating() const;
