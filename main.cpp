@@ -56,8 +56,8 @@ int main(int argc, char** argv){
         sort(allMovies.begin(), allMovies.end(), [](const Movie &a, const Movie &b) {
             return a > b;
         });
-        for (const Movie &movie : allMovies) {
-            cout << movie.getName() << ", " << movie.getRating() << endl;
+        for (const Movie &m : allMovies) {
+            cout << m.getName() << ", " << m.getRating() << endl;
 
         }
             //print all the movies in ascending alphabetical order of movie names
