@@ -118,11 +118,21 @@ int main(int argc, char** argv){
         } if (bestMovies[i].getRating() < 0) {
             cout << "No movies found with prefix " << prefix << endl;
         } else {
+            sort(moviesWithPrefix[i].begin(), moviesWithPrefix[i].end(), 
+             [](const Movie& a, const Movie& b) {
+                 return a.getOriginalIndex() < b.getOriginalIndex();
+             });
+            for (const auto& m : moviesWithPrefix[i]) {
+                cout << m.getName() << ", " << std::fixed << std::setprecision(1) << m.getRating() << endl;
+            }
+             for (const Movie& m : moviesWithPrefix[i]) {
+                cout << m.getName() << ", " << std::fixed << std::setprecision(1) << m.getRating() << endl;
+            }
             cout << "\n";
         }
     }
 
-    
+
     //  For each prefix,
     //  Print the highest rated movie with that prefix if it exists.
     for (size_t i = 0; i < bestMovies.size(); ++i) { //O(m) time complexity to print the highest rated movie for each prefix in the vector.
