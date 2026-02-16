@@ -20,6 +20,21 @@ using namespace std;
 
 bool parseLine(string &line, string &movieName, double &movieRating);
 
+string clean(string s) {
+    // 1. Remove leading whitespace
+    size_t first = s.find_first_not_of(" \t\r\n");
+    if (first == string::npos) return "";
+    s = s.substr(first);
+
+    // 2. Remove trailing whitespace
+    size_t last = s.find_last_not_of(" \t\r\n");
+    s = s.substr(0, last + 1);
+
+    // 3. Convert to lowercase
+    transform(s.begin(), s.end(), s.begin(), ::tolower);
+    return s;
+}
+
 int main(int argc, char** argv){
     if (argc < 2){
         cerr << "Not enough arguments provided (need at least 1 argument)." << endl;
@@ -90,7 +105,8 @@ int main(int argc, char** argv){
      for (size_t i = 0; i < prefixes.size(); ++i) {
         const string &prefix = prefixes[i];
         for (const Movie &movie : allMovies) {
-            if (movie.getName().rfind(prefix, 0) == 0) {
+            string cleanName = clean(movie.getName());
+            if (cleanName.find(prefix) == 0) {
                 cout << movie.getName() << ", " << movie.getRating() << endl;
                 moviesByPrefix[i].push_back(movie);
                 if (movie.getRating() > bestMovies[i].getRating()) {
