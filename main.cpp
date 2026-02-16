@@ -26,10 +26,16 @@ int main(int argc, char** argv){
     Parameters affecting complexity:
     n = number of movies in the file;
     m = number of prefixes in the file;
-    
+    k = number of movies that match a given prefix.
     Space complexity: O(n) for storing all the movies in a vector and O(m) for storing the prefixes in a vector, resulting in an overall space complexity of O(n + m).
 
-    Time complexity: O(n)
+    Time complexity: O(m* log(n) * k) +O(n log n) for sorting the movies based on their names. O(m *log(n)* k to find the lower bound of each prefix in the sorted vector of movies.
+    looping through k entries that match the prefix.)
+    Total time:
+    20 entries: real 0.290 sec; user 0.026 sec; sys 0.044 sec.
+    100 entries: real 0.294 sec; user 0.028 sec; sys 0.049 sec.
+    1000 entries: real 0.221 sec; user 0.032 sec; sys 0.053 sec.
+    76920 entries: real 1.274 sec; user 0.381 sec; sys 0.208 sec.
     */
     if (argc < 2){
         cerr << "Not enough arguments provided (need at least 1 argument)." << endl;
@@ -120,7 +126,10 @@ int main(int argc, char** argv){
         } else {
             sort(moviesWithPrefix[i].begin(), moviesWithPrefix[i].end(), 
              [](const Movie& a, const Movie& b) {
-                 return a.getOriginalIndex() < b.getOriginalIndex();
+               if (a.getRating() != b.getRating()) {
+                    return a.getRating() > b.getRating(); 
+                } 
+                return a.getName() < b.getName();
              });
             for (const auto& m : moviesWithPrefix[i]) {
                 cout << m.getName() << ", " << std::fixed << std::setprecision(1) << m.getRating() << endl;
