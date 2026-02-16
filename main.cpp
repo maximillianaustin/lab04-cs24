@@ -125,9 +125,6 @@ int main(int argc, char** argv){
             for (const auto& m : moviesWithPrefix[i]) {
                 cout << m.getName() << ", " << std::fixed << std::setprecision(1) << m.getRating() << endl;
             }
-             for (const Movie& m : moviesWithPrefix[i]) {
-                cout << m.getName() << ", " << std::fixed << std::setprecision(1) << m.getRating() << endl;
-            }
             cout << "\n";
         }
     }
