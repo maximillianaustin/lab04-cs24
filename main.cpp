@@ -1,5 +1,5 @@
-// Winter'24
-// Instructor: Diba Mirza
+// Winter'25
+// Instructor: Maximillian Austin
 // Student name: 
 #include <iostream>
 #include <fstream>
@@ -35,20 +35,25 @@ int main(int argc, char** argv){
     }
   
     // Create an object of a STL data-structure to store all the movies
+    vector<Movie> allMovies;
 
     string line, movieName;
     double movieRating;
     // Read each file and store the name and rating
-    while (getline (movieFile, line) && parseLine(line, movieName, movieRating)){
-            // Use std::string movieName and double movieRating
-            // to construct your Movie objects
-            // cout << movieName << " has rating " << movieRating << endl;
-            // insert elements into your data structure
-    }
+        while (getline (movieFile, line) && parseLine(line, movieName, movieRating)){
+                Movie n(movieName, movieRating);
+                allMovies.push_back(n);
+                // Use std::string movieName and double movieRating
+                // to construct your Movie objects
+                cout << movieName << " has rating " << movieRating << endl;
+                // insert elements into your data structure
+        }
 
     movieFile.close();
 
     if (argc == 2){
+        priority_queue<Movie> moviesQueue; // replace with your data structure
+
             //print all the movies in ascending alphabetical order of movie names
             return 0;
     }
