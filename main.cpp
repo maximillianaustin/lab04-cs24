@@ -75,16 +75,44 @@ int main(int argc, char** argv){
             prefixes.push_back(line);
         }
     }
+    prefixFile.close();
+
+    vector<vector<Movie>> moviesByPrefix(prefixes.size());
+    vector<Movie> bestMovies(prefixes.size(), Movie("", -1.0));
+   
+    
+
+    
 
     //  For each prefix,
     //  Find all movies that have that prefix and store them in an appropriate data structure
     //  If no movie with that prefix exists print the following message
-    cout << "No movies found with prefix "<<"<replace with prefix>" << endl;
+     for (size_t i = 0; i < prefixes.size(); ++i) {
+        const string &prefix = prefixes[i];
+        for (const Movie &movie : allMovies) {
+            if (movie.getName().rfind(prefix, 0) == 0) {
+                cout << movie.getName() << ", " << movie.getRating() << endl;
+                moviesByPrefix[i].push_back(movie);
+                if (movie.getRating() > bestMovies[i].getRating()) {
+                    bestMovies[i] = movie;
+                }
+            }
+        } if (moviesByPrefix[i].empty()) {
+            cout << "No movies found with prefix " << prefix << endl;
+        } else {
+            cout << "\n";
+        }
+    }
+
 
     //  For each prefix,
     //  Print the highest rated movie with that prefix if it exists.
-    cout << "Best movie with prefix " << "<replace with prefix>" << " is: " << "replace with movie name" << " with rating " << std::fixed << std::setprecision(1) << "replace with movie rating" << endl;
-
+    for (size_t i = 0; i < bestMovies.size(); ++i) {
+        const Movie &m = bestMovies[i];
+        if (m.getRating() >= 0) {
+            cout << "Best movie with prefix " << prefixes[i] << " is: " << bestMovies[i].getName() << " with rating " << std::fixed << std::setprecision(1) << bestMovies[i].getRating() << endl;
+        }
+    }
     return 0;
 }
 
