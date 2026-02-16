@@ -7,7 +7,7 @@ class Movie {
     int getOriginalIndex() const;
     std::string getName() const;
     double getRating() const;
-    Movie(std::string name, double rating);
+    Movie(std::string name, double rating, int oi);
     private:
         std::string name;
         double rating;

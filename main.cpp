@@ -51,15 +51,15 @@ int main(int argc, char** argv){
     double movieRating;
     // Read each file and store the name and rating
     int count = 0;
-        while (getline (movieFile, line) && parseLine(line, movieName, movieRating)){
-                Movie n(movieName, movieRating, count);
-                count ++;
-                allMovies.push_back(n);
-                // Use std::string movieName and double movieRating
-                // to construct your Movie objects
-               // cout << movieName << " has rating " << movieRating << endl;
-                // insert elements into your data structure
-        }
+    while (getline (movieFile, line) && parseLine(line, movieName, movieRating)){
+            Movie n(movieName, movieRating, count);
+            count ++;
+            allMovies.push_back(n);
+            // Use std::string movieName and double movieRating
+            // to construct your Movie objects
+            // cout << movieName << " has rating " << movieRating << endl;
+            // insert elements into your data structure
+    }
 
     movieFile.close();
     sort(allMovies.begin(), allMovies.end());
@@ -90,7 +90,7 @@ int main(int argc, char** argv){
     }
     prefixFile.close(); // O(m) time complexity to read all the prefixes from the file and store them in a vector.
 
-    vector<Movie> bestMovies(prefixes.size(), Movie("", -1.0));
+    vector<Movie> bestMovies(prefixes.size(), Movie("", -1.0, -1));
    vector<vector<Movie>> moviesWithPrefix(prefixes.size()); // O(m) space complexity to store the movies with each prefix in a vector of vectors.
     
 
@@ -101,7 +101,7 @@ int main(int argc, char** argv){
     //  If no movie with that prefix exists print the following message
      for (size_t i = 0; i < prefixes.size(); ++i) { // O(m * n) time complexity to find all movies that have the given prefix for each prefix in the vector.
         const string &prefix = prefixes[i];
-        Movie target(prefix, 0.0);
+        Movie target(prefix, 0.0, -1);
         auto it = lower_bound(allMovies.begin(), allMovies.end(), target); // O(log n) time complexity to find the lower bound of the prefix in the sorted vector of movies.
         while (it != allMovies.end()){
             const Movie &m = *it;
@@ -115,7 +115,7 @@ int main(int argc, char** argv){
             }
             ++it;
         }
-        } if (bestMovies[i].getRating() < 0) {
+        if (bestMovies[i].getRating() < 0) {
             cout << "No movies found with prefix " << prefix << endl;
         } else {
             sort(moviesWithPrefix[i].begin(), moviesWithPrefix[i].end(), 
