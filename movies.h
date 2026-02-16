@@ -10,4 +10,5 @@ class Movie {
     private:
         std::string name;
         double rating;
+        int originalIndex;
 };

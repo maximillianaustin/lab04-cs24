@@ -20,22 +20,17 @@ using namespace std;
 
 bool parseLine(string &line, string &movieName, double &movieRating);
 
-string clean(string s) {
-    // 1. Remove leading whitespace
-    size_t first = s.find_first_not_of(" \t\r\n");
-    if (first == string::npos) return "";
-    s = s.substr(first);
-
-    // 2. Remove trailing whitespace
-    size_t last = s.find_last_not_of(" \t\r\n");
-    s = s.substr(0, last + 1);
-
-    // 3. Convert to lowercase
-    transform(s.begin(), s.end(), s.begin(), ::tolower);
-    return s;
-}
 
 int main(int argc, char** argv){
+    /*
+    Parameters affecting complexity:
+    n = number of movies in the file;
+    m = number of prefixes in the file;
+    
+    Space complexity: O(n) for storing all the movies in a vector and O(m) for storing the prefixes in a vector, resulting in an overall space complexity of O(n + m).
+
+    Time complexity: O(n)
+    */
     if (argc < 2){
         cerr << "Not enough arguments provided (need at least 1 argument)." << endl;
         cerr << "Usage: " << argv[ 0 ] << " moviesFilename prefixFilename " << endl;
@@ -50,13 +45,15 @@ int main(int argc, char** argv){
     }
   
     // Create an object of a STL data-structure to store all the movies
-    vector<Movie> allMovies;
+    vector<Movie> allMovies; //O(n) size and space complexity where n is the number of movies in the file.
 
     string line, movieName;
     double movieRating;
     // Read each file and store the name and rating
+    int count = 0;
         while (getline (movieFile, line) && parseLine(line, movieName, movieRating)){
-                Movie n(movieName, movieRating);
+                Movie n(movieName, movieRating, count);
+                count ++;
                 allMovies.push_back(n);
                 // Use std::string movieName and double movieRating
                 // to construct your Movie objects
@@ -65,16 +62,17 @@ int main(int argc, char** argv){
         }
 
     movieFile.close();
-
+    sort(allMovies.begin(), allMovies.end());
     if (argc == 2){
          // replace with your data structure
-            sort(allMovies.begin(), allMovies.end());
-        for (const Movie &m : allMovies) {
+              // O(n log n) time complexity for sorting the movies based on their names.
+        for (const Movie &m : allMovies) {  // O(n) time complexity to print all the movies in ascending alphabetical order of movie names.
             cout << m.getName() << ", " << m.getRating() << endl;
 
         }
             //print all the movies in ascending alphabetical order of movie names
-            return 0;
+            return 0; 
+            //Overall O(n log n) time complexity.
     }
 
     ifstream prefixFile (argv[2]);
@@ -90,11 +88,10 @@ int main(int argc, char** argv){
             prefixes.push_back(line);
         }
     }
-    prefixFile.close();
+    prefixFile.close(); // O(m) time complexity to read all the prefixes from the file and store them in a vector.
 
-    vector<vector<Movie>> moviesByPrefix(prefixes.size());
     vector<Movie> bestMovies(prefixes.size(), Movie("", -1.0));
-   
+   vector<vector<Movie>> moviesWithPrefix(prefixes.size()); // O(m) space complexity to store the movies with each prefix in a vector of vectors.
     
 
     
@@ -102,28 +99,33 @@ int main(int argc, char** argv){
     //  For each prefix,
     //  Find all movies that have that prefix and store them in an appropriate data structure
     //  If no movie with that prefix exists print the following message
-     for (size_t i = 0; i < prefixes.size(); ++i) {
+     for (size_t i = 0; i < prefixes.size(); ++i) { // O(m * n) time complexity to find all movies that have the given prefix for each prefix in the vector.
         const string &prefix = prefixes[i];
-        for (const Movie &movie : allMovies) {
-            string cleanName = clean(movie.getName());
-            if (cleanName.find(prefix) == 0) {
-                cout << movie.getName() << ", " << movie.getRating() << endl;
-                moviesByPrefix[i].push_back(movie);
-                if (movie.getRating() > bestMovies[i].getRating()) {
-                    bestMovies[i] = movie;
+        Movie target(prefix, 0.0);
+        auto it = lower_bound(allMovies.begin(), allMovies.end(), target); // O(log n) time complexity to find the lower bound of the prefix in the sorted vector of movies.
+        while (it != allMovies.end()){
+            const Movie &m = *it;
+            if (m.getName().rfind(prefix,0) == 0) {
+                moviesWithPrefix[i].push_back(m); // O(1) time complexity to add a movie to the vector of movies with the given prefix.
+                if (m.getRating() > bestMovies[i].getRating()) {
+                    bestMovies[i] = m;
                 }
+            } else {
+                break;
             }
-        } if (moviesByPrefix[i].empty()) {
+            ++it;
+        }
+        } if (bestMovies[i].getRating() < 0) {
             cout << "No movies found with prefix " << prefix << endl;
         } else {
             cout << "\n";
         }
     }
 
-
+    
     //  For each prefix,
     //  Print the highest rated movie with that prefix if it exists.
-    for (size_t i = 0; i < bestMovies.size(); ++i) {
+    for (size_t i = 0; i < bestMovies.size(); ++i) { //O(m) time complexity to print the highest rated movie for each prefix in the vector.
         const Movie &m = bestMovies[i];
         if (m.getRating() >= 0) {
             cout << "Best movie with prefix " << prefixes[i] << " is: " << bestMovies[i].getName() << " with rating " << std::fixed << std::setprecision(1) << bestMovies[i].getRating() << endl;
