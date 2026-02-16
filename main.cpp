@@ -26,26 +26,27 @@ int main(int argc, char** argv){
     Parameters affecting complexity:
     n = number of movies in the file;
     m = number of prefixes in the file;
-    k = number of movies that match a given prefix.
+    k = average number of movies that match a given prefix.
     Space complexity: O(n + m + m * k) for storing all the movies in a vector and O(m) for storing the prefixes in a vector, resulting in an overall space complexity of O(n + m).
 
-    Time complexity: O(m* log(n) * k) +O(n log n) for sorting the movies based on their names. O(m *log(n)* k to find the lower bound of each prefix in the sorted vector of movies.
+    Time complexity: O(m* log(n) * k) +O(n log n).  O(n log n) for sorting the movies based on their names. O(m *log(n)* k to find the lower bound of each prefix in the sorted vector of movies.
     looping through k entries that match the prefix.)
-    Total time:
-    20 entries: real 0.290 sec; user 0.026 sec; sys 0.044 sec.
-    100 entries: real 0.294 sec; user 0.028 sec; sys 0.049 sec.
-    1000 entries: real 0.221 sec; user 0.032 sec; sys 0.053 sec.
-    76920 entries: real 1.435 sec; user 0.445 sec; sys 0.180 sec.
+
 
     "If you designed your algorithm for a low time complexity,
         Were you able to achieve a low space complexity as well?
         Why or why not?"
         
     
-    I was able to achieve a low space complexity while prioritizing a low time complexity by using vectors to store the movies and prefixes.  The space complexity comes from the space that the vectors contain as well as the space to store the movie objects and the result.
-    By sorting the movies based on their names, I was able to achieve a low time complexity for finding the movies that matched each prefix utilizing a binary search.  Additional space had to be allocated for the result vectors, which would contain the prefixed movies sorted in a way
-    that put the highest rated movies first, and secondarily sorted alphabetically.  Now the low time complexity is very helpful when dealing with large entries (like 76920 entries) as it allows the program to run in a reasonable amount of time, while the space complexity is still manageable due to the use of vectors and efficient storage of movie objects).
-    Unfortunately this means that lower entries (like 20 entries) will have a higher time complexity than necessary, but the overall design of the algorithm allows for efficient handling of large datasets while still maintaining a reasonable space.
+    Yes, I achieved a low space complexity (O(n + m) + O(m * k)) while prioritizing low time complexity.
+       
+    The primary storage (allMovies) uses O(n) space. To achieve the low time complexity for searching, and O(m) for storing the prefixes.
+    I kept the former sorted by name, allowing for O(log N) binary search lookups (for each prefix).
+
+    This requires a tradeoff between time and space complexity. As the output must be printed based on rating primarily and alphabetically secondarily, I needed to 
+    additionally store the movies with each prefix in a vector of vectors (moviesWithPrefix) which has O(m * k) space complexity, where m is the number of prefixes and k is the number of movies that match a given prefix.
+    This allows for efficient sorting and retrieval of movies based on the prefixes, but it does increase the overall space complexity to O(n + m + m * k). 
+    However, this is necessary to achieve the desired time complexity for searching and sorting the movies based on the prefixes.
     */
     if (argc < 2){
         cerr << "Not enough arguments provided (need at least 1 argument)." << endl;
@@ -161,7 +162,14 @@ int main(int argc, char** argv){
 }
 
 /* Add your run time analysis for part 3 of the assignment here as commented block*/
+/*
+    Total time:
+    20 entries: real 0.290 sec; user 0.026 sec; sys 0.044 sec.
+    100 entries: real 0.294 sec; user 0.028 sec; sys 0.049 sec.
+    1000 entries: real 0.221 sec; user 0.032 sec; sys 0.053 sec.
+    76920 entries: real 1.435 sec; user 0.445 sec; sys 0.180 sec.
 
+*/
 bool parseLine(string &line, string &movieName, double &movieRating) {
     int commaIndex = line.find_last_of(",");
     movieName = line.substr(0, commaIndex);
