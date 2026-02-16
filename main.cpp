@@ -45,15 +45,21 @@ int main(int argc, char** argv){
                 allMovies.push_back(n);
                 // Use std::string movieName and double movieRating
                 // to construct your Movie objects
-                cout << movieName << " has rating " << movieRating << endl;
+               // cout << movieName << " has rating " << movieRating << endl;
                 // insert elements into your data structure
         }
 
     movieFile.close();
 
     if (argc == 2){
-        priority_queue<Movie> moviesQueue; // replace with your data structure
+         // replace with your data structure
+        sort(allMovies.begin(), allMovies.end(), [](const Movie &a, const Movie &b) {
+            return a > b;
+        });
+        for (const Movie &movie : allMovies) {
+            cout << movie.getName() << ", " << movie.getRating() << endl;
 
+        }
             //print all the movies in ascending alphabetical order of movie names
             return 0;
     }

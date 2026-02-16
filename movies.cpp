@@ -6,3 +6,9 @@ bool Movie::operator>(const Movie &left) const {
 bool Movie::operator==(const Movie &left) const {
     return name == left.name && rating == left.rating;
 }
+std::string Movie::getName() const {
+    return name;
+}
+double Movie::getRating() const {
+    return rating;
+}
