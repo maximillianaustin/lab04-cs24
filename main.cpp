@@ -29,7 +29,7 @@ int main(int argc, char** argv){
     k = average number of movies that match a given prefix.
     Space complexity: O(n + m + m * k) for storing all the movies in a vector and O(m) for storing the prefixes in a vector, resulting in an overall space complexity of O(n + m).
 
-    Time complexity: O(m* log(n) * k) +O(n log n).  O(n log n) for sorting the movies based on their names. O(m *log(n)* k to find the lower bound of each prefix in the sorted vector of movies.
+    Time complexity: O(m* (log(n) + k) +O(n log n).  O(n log n) for sorting the movies based on their names. O(m *(log(n)+ k )to find the lower bound of each prefix in the sorted vector of movies.
     looping through k entries that match the prefix.)
 
 
